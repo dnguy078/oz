@@ -45,7 +45,7 @@ type PodAccessRequestSpec struct {
 	// +kubebuilder:validation:Optional
 	CPULimit string `json:"cpuLimit,omitempty"`
 
-	// CPULimits sets the resources memory limit of the primary container
+	// MemoryLimit sets the resources memory limit of the primary container
 	//
 	// If omitted, the spec.resources.limit.memory from the PodAccessTemplate is used.
 	//
