@@ -20,10 +20,12 @@ func createAccessRequest(cmd *cobra.Command, req api.IRequestResource) {
 	// Pretty-print the type of object we're creating...
 	reqKind := req.GetObjectKind().GroupVersionKind().GroupKind().Kind
 	cmd.Printf(logNotice("Creating %s... "), reqKind)
+	cmd.Printf("Creating reqKing: %+v", reqKind)
+	cmd.Printf("Creating req: %+v", req)
 
 	// Make the calls to create the request
 	if err := client.Create(cmd.Context(), req); err != nil {
-		fmt.Printf(
+		cmd.Printf(
 			logError("Error - Creating %s failed:\n  %s\n"),
 			reqKind,
 			err,

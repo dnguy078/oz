@@ -48,13 +48,23 @@ spec:
           spec:
             description: PodAccessRequestSpec defines the desired state of AccessRequest
             properties:
+              cpuLimit:
+                description: "CPULimits sets the resources cpu limit of the primary
+                  container \n If omitted, the spec.resources.limit.cpu from the PodAccessTemplate
+                  is used."
+                type: string
               duration:
                 description: "Duration sets the length of time from the `spec.creationTimestamp`
                   that this object will live. After the time has expired, the resouce
                   will be automatically deleted on the next reconcilliation loop.
-                  \n If omitted, the spec.defautlDuration from the ExecAccessTemplate
+                  \n If omitted, the spec.defaultDuration from the ExecAccessTemplate
                   is used. \n Valid time units are \"s\", \"m\", \"h\"."
                 pattern: ^[0-9]+(s|m|h)$
+                type: string
+              maxMemory:
+                description: "CPULimits sets the resources memory limit of the primary
+                  container \n If omitted, the spec.resources.limit.memory from the
+                  PodAccessTemplate is used."
                 type: string
               templateName:
                 description: Defines the name of the `ExecAcessTemplate` that should

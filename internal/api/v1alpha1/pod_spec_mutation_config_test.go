@@ -88,8 +88,7 @@ var _ = Describe("PodSpecMutationConfig", Ordered, func() {
 			// VERIFY: We got back '0' by default
 			Expect(ret).To(Equal(0))
 		})
-		It(
-			"getDefaultContainerID should return 1 by if we set the container name to contB",
+		It("getDefaultContainerID should return 1 by if we set the container name to contB",
 			func() {
 				// Basic resource with simple container identifier
 				config := &PodTemplateSpecMutationConfig{DefaultContainerName: "contB"}
@@ -103,8 +102,7 @@ var _ = Describe("PodSpecMutationConfig", Ordered, func() {
 			},
 		)
 
-		It(
-			"getDefaultContainerID should return 1 by if the annotation is set",
+		It("getDefaultContainerID should return 1 by if the annotation is set",
 			func() {
 				// Patch the deployment
 				podTemplateSpec.Annotations[DefaultContainerAnnotationKey] = "contB"
@@ -187,6 +185,24 @@ var _ = Describe("PodSpecMutationConfig", Ordered, func() {
 					"TestAnnotation": "value",
 				},
 			))
+		})
+
+		It("PatchPodTemplateSpec should set resource limits if requested", func() {
+			cpu, err := resource.ParseQuantity("500m")
+			Expect(err).To(Not(HaveOccurred()))
+
+			config := &PodTemplateSpecMutationConfig{
+				Resources: v1.ResourceRequirements{
+					Limits: v1.ResourceList{
+						corev1.ResourceCPU: cpu,
+					},
+				},
+			}
+
+			ret, err := config.PatchPodTemplateSpec(ctx, podTemplateSpec)
+			Expect(err).To(Not(HaveOccurred()))
+
+			Expect(ret.Spec.Containers[0].Resources.Limits.Cpu()).To(Equal(&cpu))
 		})
 
 		It("PatchPodTemplateSpec should mutate command", func() {

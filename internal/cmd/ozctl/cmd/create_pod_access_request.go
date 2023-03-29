@@ -11,7 +11,8 @@ import (
 	api "github.com/diranged/oz/internal/api/v1alpha1"
 )
 
-var createPodAccessRequestExample = `
+var (
+	createPodAccessRequestExample = `
 A PodAccessRequest always generates a new Pod for you to do your work in. You simply run:
 
 $ ozctl create PodAccessRequest <existing template>
@@ -20,6 +21,12 @@ Success, your access request is ready! Here are your access instructions:
 
 kubectl exec -ti -n default user-vd9r9-a217f263 -- /bin/sh
 `
+	// Holder of the optional --cpuLimit flag
+	cpuLimit = "256m"
+
+	// Holder of the optional --memoryLimit flag
+	memoryLimit = "1024m"
+)
 
 // createPodAccessRequestCmd represents the create command
 var createPodAccessRequestCmd = &cobra.Command{
@@ -71,6 +78,8 @@ var createPodAccessRequestCmd = &cobra.Command{
 			Spec: api.PodAccessRequestSpec{
 				TemplateName: templateName,
 				Duration:     duration,
+				CPULimit:     cpuLimit,
+				MemoryLimit:  memoryLimit,
 			},
 		}
 
@@ -92,6 +101,10 @@ func init() {
 		StringVarP(&waitTime, "wait", "w", "5m", "Duration to wait for the access request to be fully ready. Valid time units are: ns, us, ms, s, m, h.")
 	createPodAccessRequestCmd.Flags().
 		StringVarP(&requestNamePrefix, "request-name", "N", usernameEnv, "Prefix name to use when creating the `AccessRequest` objects.")
+	createPodAccessRequestCmd.Flags().
+		StringVar(&cpuLimit, "cpu", cpuLimit, "CPU resource limits given to the primary container")
+	createPodAccessRequestCmd.Flags().
+		StringVar(&memoryLimit, "memory", memoryLimit, "Memory resource limits given to the primary container")
 
 	kubeConfigFlags.AddFlags(createPodAccessRequestCmd.Flags())
 

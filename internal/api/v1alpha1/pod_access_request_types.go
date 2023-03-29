@@ -37,10 +37,25 @@ type PodAccessRequestSpec struct {
 	// +kubebuilder:validation:Required
 	TemplateName string `json:"templateName"`
 
+	// CPULimits sets the resources cpu limit of the primary container
+	//
+	// If omitted, the spec.resources.limit.cpu from the PodAccessTemplate is used.
+	//
+	//
+	// +kubebuilder:validation:Optional
+	CPULimit string `json:"cpuLimit,omitempty"`
+
+	// CPULimits sets the resources memory limit of the primary container
+	//
+	// If omitted, the spec.resources.limit.memory from the PodAccessTemplate is used.
+	//
+	// +kubebuilder:validation:Optional
+	MemoryLimit string `json:"maxMemory,omitempty"`
+
 	// Duration sets the length of time from the `spec.creationTimestamp` that this object will live. After the
 	// time has expired, the resouce will be automatically deleted on the next reconcilliation loop.
 	//
-	// If omitted, the spec.defautlDuration from the ExecAccessTemplate is used.
+	// If omitted, the spec.defaultDuration from the ExecAccessTemplate is used.
 	//
 	// Valid time units are "s", "m", "h".
 	//
